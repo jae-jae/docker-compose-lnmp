@@ -1,0 +1,31 @@
+version: "3"
+services:
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/usr/share/nginx/html
+    links:
+      - php:php-fpm
+
+
+  php:
+    image: php:7.1-fpm
+    expose:
+      - "9000"
+    volumes:
+      - ./app:/usr/share/nginx/html
+    links:
+      - mysql:db
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
